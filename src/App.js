@@ -7,20 +7,39 @@ class App extends Component {
     guests: [
       {
         name: 'Treasure',
-        isConfirmed: false
+        isConfirmed: false,
+        isEditing: false
       },
       {
         name: 'Nick',
-        isConfirmed: true 
+        isConfirmed: true ,
+        isEditing: false
       },
       {
         name: 'Matt K',
-        isConfirmed: true 
+        isConfirmed: true ,
+        isEditing: true
       }
     ]
-  }
+  };
 
-  toggelConfirmationAt = indexToChange => 
+  toggleGuestPropertyAt = (property,indexToChange) => 
+    this.setState({
+      guests: this.state.guests.map((guest, index) => {
+        if(index === indexToChange){
+          return {
+            ...guest,
+            [property]: !guest[property]
+        }
+      }
+        return guest;
+      })
+  });
+
+  toggleConfirmationAt = index => this.toggleGuestPropertyAt("isConfirmed", index);
+  toggleEditingAt = index => this.toggleGuestPropertyAt("isEditing", index)
+
+  toggleConfirmationAt = indexToChange => 
   this.setState({
       guests: this.state.guests.map((guest, index) => {
         if(index === indexToChange){
@@ -73,7 +92,12 @@ class App extends Component {
               </tr>
             </tbody>
           </table>
-          <GuestList guests={this.state.guests}/>
+          <GuestList
+           guests={this.state.guests} 
+            toggleConfirmationAt={this.toggleConfirmationAt}
+            toggleEditingAt={this.toggleEditingAt}
+            
+          />
         </div>
       </div>
     );
